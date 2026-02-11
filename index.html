@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - Zapybara</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 350px;
+            text-align: center;
+            border-top: 5px solid #D65A31;
+        }
+        h1 { color: #D65A31; margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 14px; margin-bottom: 30px; }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background: #fafafa;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #D65A31;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        button:hover { background: #b54522; }
+        
+        .toggle { margin-top: 20px; font-size: 13px; color: #666; cursor: pointer; text-decoration: underline; }
+        
+        .token-box {
+            display: none;
+            background: #FFF8E1;
+            border: 1px solid #FFE082;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        code { display: block; background: white; padding: 10px; margin: 10px 0; font-weight: bold; word-break: break-all; color: #D65A31; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zapybara 🌿</h1>
+        <p class="subtitle">A automação mais tranquila do Brasil.</p>
+        
+        <div id="auth-form">
+            <input type="email" id="email" placeholder="Seu E-mail">
+            <input type="password" id="password" placeholder="Sua Senha">
+            <button onclick="handleAuth()" id="btn-submit">Entrar na Toca</button>
+            <div class="toggle" onclick="toggleMode()">Não tem conta? Criar agora</div>
+            <p id="msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+        </div>
+
+        <div id="success-area" class="token-box">
+            <strong>Sucesso! 🎉</strong>
+            <p style="font-size: 12px;">Copie este código e cole na extensão:</p>
+            <code id="token-display">...</code>
+            <button onclick="copyToken()" style="background: #444; font-size: 12px; padding: 10px;">Copiar Código</button>
+        </div>
+    </div>
+
+    <script>
+        // MUDAR AQUI: Coloque o link do seu Render quando estiver pronto
+        const API_URL = "https://zapybara-api.onrender.com"; 
+        
+        let isLogin = true;
+
+        function toggleMode() {
+            isLogin = !isLogin;
+            document.getElementById('btn-submit').innerText = isLogin ? 'Entrar na Toca' : 'Criar Conta';
+            document.querySelector('.toggle').innerText = isLogin ? 'Não tem conta? Criar agora' : 'Já tem conta? Entrar';
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('msg');
+            
+            if(!email || !password) { msg.innerText = "Preencha tudo, capivara!"; return; }
+
+            msg.innerText = "Carregando...";
+            
+            try {
+                const endpoint = isLogin ? `${API_URL}/login` : `${API_URL}/register`;
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    if (isLogin) {
+                        document.getElementById('auth-form').style.display = 'none';
+                        document.getElementById('success-area').style.display = 'block';
+                        document.getElementById('token-display').innerText = data.token;
+                    } else {
+                        alert("Conta criada! Agora faça login.");
+                        toggleMode();
+                        msg.innerText = "";
+                    }
+                } else {
+                    msg.innerText = data.error || "Erro desconhecido";
+                }
+            } catch (e) {
+                msg.innerText = "Erro ao conectar no servidor.";
+            }
+        }
+
+        function copyToken() {
+            navigator.clipboard.writeText(document.getElementById('token-display').innerText);
+            alert("Copiado! Agora vá para o WhatsApp.");
+        }
+    </script>
+</body>
+</html>
