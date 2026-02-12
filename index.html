@@ -4,20 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar - Zapybara</title>
+    
+    <link rel="icon" type="image/png" href="icon.png">
+
     <style>
         :root { --bg-color: #f4f4f4; --container-bg: white; --text-color: #333; --orange: #D65A31; }
         [data-theme="dark"] { --bg-color: #111b21; --container-bg: #202c33; --text-color: #e9edef; }
         
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; transition: 0.3s; }
         .container { background: var(--container-bg); padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 350px; text-align: center; border-top: 5px solid var(--orange); transition: 0.3s; }
-        h1 { color: var(--orange); margin-bottom: 5px; }
+        
+        /* TÍTULO COM ÍCONE */
+        .brand-title { display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--orange); margin-bottom: 5px; }
+        .brand-logo { width: 40px; height: 40px; border-radius: 8px; }
+        h1 { margin: 0; font-size: 28px; }
+
         input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: var(--bg-color); color: var(--text-color); }
         button { width: 100%; padding: 14px; background: var(--orange); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         button:hover { background: #b54522; }
         .toggle { margin-top: 20px; font-size: 13px; cursor: pointer; text-decoration: underline; }
         .token-box { display: none; background: #FFF8E1; border: 1px solid #FFE082; padding: 15px; border-radius: 8px; margin-top: 20px; color: #333; }
         
-        /* --- NOVO INTERRUPTOR --- */
+        /* Interruptor */
         .theme-switch-wrapper { position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; }
         .theme-label { opacity: 0.5; transition: 0.3s; }
         [data-theme="dark"] .label-dark, :not([data-theme="dark"]) .label-light { opacity: 1; }
@@ -40,7 +48,11 @@
     </div>
 
     <div class="container">
-        <h1>Zapybara 🌿</h1>
+        <div class="brand-title">
+            <img src="icon.png" alt="Zapybara Logo" class="brand-logo">
+            <h1>Zapybara</h1>
+        </div>
+        
         <p>A automação mais tranquila do Brasil.</p>
         <div id="auth-form">
             <input type="email" id="email" placeholder="Seu E-mail">
@@ -61,7 +73,6 @@
         const API_URL = "https://zapybara-api.onrender.com"; 
         let isLogin = true;
 
-        // Inicializa o tema salvo
         function initializeTheme() {
             const savedTheme = localStorage.getItem('site-theme') || 'light';
             const checkbox = document.getElementById('site-theme-checkbox');
@@ -71,7 +82,6 @@
             }
         }
 
-        // Troca o tema pelo interruptor
         function handleThemeChange(checkbox) {
             if (checkbox.checked) {
                 document.body.setAttribute('data-theme', 'dark');
@@ -114,7 +124,7 @@
             alert("Copiado!");
         }
         
-        initializeTheme(); // Chama ao carregar a página
+        initializeTheme(); 
     </script>
 </body>
 </html>
