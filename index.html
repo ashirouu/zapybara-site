@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar - Zapybara</title>
     <style>
+        :root {
+    --bg-color: #f4f4f4;
+    --container-bg: white;
+    --text-color: #333;
+}
+[data-theme="dark"] {
+    --bg-color: #111b21;
+    --container-bg: #202c33;
+    --text-color: #e9edef;
+}
+
+body { background: var(--bg-color); color: var(--text-color); transition: 0.3s; }
+.container { background: var(--container-bg); transition: 0.3s; }
+
+/* Botão flutuante no canto */
+.theme-switch {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: none; font-size: 24px; cursor: pointer;
+}
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f4f4f4;
@@ -65,6 +84,7 @@
     </style>
 </head>
 <body>
+    <button class="theme-switch" onclick="toggleSiteTheme()" id="site-theme-btn">🌙</button>
     <div class="container">
         <h1>Zapybara 🌿</h1>
         <p class="subtitle">A automação mais tranquila do Brasil.</p>
@@ -86,6 +106,21 @@
     </div>
 
     <script>
+        function toggleSiteTheme() {
+    const body = document.body;
+    const btn = document.getElementById('site-theme-btn');
+
+    // Verifica se já está dark
+    const isDark = body.getAttribute('data-theme') === 'dark';
+
+    if (isDark) {
+        body.removeAttribute('data-theme');
+        btn.innerText = '🌙';
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        btn.innerText = '☀️';
+    }
+}
         // MUDAR AQUI: Coloque o link do seu Render quando estiver pronto
         const API_URL = "https://zapybara-api.onrender.com"; 
         
