@@ -5,90 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar - Zapybara</title>
     <style>
-        :root {
-    --bg-color: #f4f4f4;
-    --container-bg: white;
-    --text-color: #333;
-}
-[data-theme="dark"] {
-    --bg-color: #111b21;
-    --container-bg: #202c33;
-    --text-color: #e9edef;
-}
-
-body { background: var(--bg-color); color: var(--text-color); transition: 0.3s; }
-.container { background: var(--container-bg); transition: 0.3s; }
-
-/* Botão flutuante no canto */
-.theme-switch {
-    position: absolute; top: 20px; right: 20px;
-    background: none; border: none; font-size: 24px; cursor: pointer;
-}
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            width: 350px;
-            text-align: center;
-            border-top: 5px solid #D65A31;
-        }
-        h1 { color: #D65A31; margin-bottom: 5px; }
-        .subtitle { color: #888; font-size: 14px; margin-bottom: 30px; }
+        :root { --bg-color: #f4f4f4; --container-bg: white; --text-color: #333; --orange: #D65A31; }
+        [data-theme="dark"] { --bg-color: #111b21; --container-bg: #202c33; --text-color: #e9edef; }
         
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background: #fafafa;
-        }
-        
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #D65A31;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; transition: 0.3s; }
+        .container { background: var(--container-bg); padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 350px; text-align: center; border-top: 5px solid var(--orange); transition: 0.3s; }
+        h1 { color: var(--orange); margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: var(--bg-color); color: var(--text-color); }
+        button { width: 100%; padding: 14px; background: var(--orange); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         button:hover { background: #b54522; }
+        .toggle { margin-top: 20px; font-size: 13px; cursor: pointer; text-decoration: underline; }
+        .token-box { display: none; background: #FFF8E1; border: 1px solid #FFE082; padding: 15px; border-radius: 8px; margin-top: 20px; color: #333; }
         
-        .toggle { margin-top: 20px; font-size: 13px; color: #666; cursor: pointer; text-decoration: underline; }
-        
-        .token-box {
-            display: none;
-            background: #FFF8E1;
-            border: 1px solid #FFE082;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        code { display: block; background: white; padding: 10px; margin: 10px 0; font-weight: bold; word-break: break-all; color: #D65A31; }
+        /* --- NOVO INTERRUPTOR --- */
+        .theme-switch-wrapper { position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; }
+        .theme-label { opacity: 0.5; transition: 0.3s; }
+        [data-theme="dark"] .label-dark, :not([data-theme="dark"]) .label-light { opacity: 1; }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'); background-repeat: no-repeat; background-position: center; }
+        input:checked + .slider { background-color: var(--orange); }
+        input:checked + .slider:before { transform: translateX(22px); background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23111b21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'); }
     </style>
 </head>
 <body>
-    <button class="theme-switch" onclick="toggleSiteTheme()" id="site-theme-btn">🌙</button>
+    <div class="theme-switch-wrapper">
+        <span class="theme-label label-light">Modo Claro</span>
+        <label class="switch">
+            <input type="checkbox" id="site-theme-checkbox" onchange="handleThemeChange(this)">
+            <span class="slider"></span>
+        </label>
+        <span class="theme-label label-dark">Modo Escuro</span>
+    </div>
+
     <div class="container">
         <h1>Zapybara 🌿</h1>
-        <p class="subtitle">A automação mais tranquila do Brasil.</p>
-        
+        <p>A automação mais tranquila do Brasil.</p>
         <div id="auth-form">
             <input type="email" id="email" placeholder="Seu E-mail">
             <input type="password" id="password" placeholder="Sua Senha">
@@ -96,35 +49,38 @@ body { background: var(--bg-color); color: var(--text-color); transition: 0.3s; 
             <div class="toggle" onclick="toggleMode()">Não tem conta? Criar agora</div>
             <p id="msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
         </div>
-
         <div id="success-area" class="token-box">
             <strong>Sucesso! 🎉</strong>
             <p style="font-size: 12px;">Copie este código e cole na extensão:</p>
-            <code id="token-display">...</code>
-            <button onclick="copyToken()" style="background: #444; font-size: 12px; padding: 10px;">Copiar Código</button>
+            <code id="token-display" style="display:block;background:white;padding:10px;margin:10px 0;word-break:break-all;color:#D65A31;">...</code>
+            <button onclick="copyToken()" style="background:#444;font-size:12px;padding:10px;">Copiar Código</button>
         </div>
     </div>
 
     <script>
-        function toggleSiteTheme() {
-    const body = document.body;
-    const btn = document.getElementById('site-theme-btn');
-
-    // Verifica se já está dark
-    const isDark = body.getAttribute('data-theme') === 'dark';
-
-    if (isDark) {
-        body.removeAttribute('data-theme');
-        btn.innerText = '🌙';
-    } else {
-        body.setAttribute('data-theme', 'dark');
-        btn.innerText = '☀️';
-    }
-}
-        // MUDAR AQUI: Coloque o link do seu Render quando estiver pronto
         const API_URL = "https://zapybara-api.onrender.com"; 
-        
         let isLogin = true;
+
+        // Inicializa o tema salvo
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('site-theme') || 'light';
+            const checkbox = document.getElementById('site-theme-checkbox');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                checkbox.checked = true;
+            }
+        }
+
+        // Troca o tema pelo interruptor
+        function handleThemeChange(checkbox) {
+            if (checkbox.checked) {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('site-theme', 'dark');
+            } else {
+                document.body.removeAttribute('data-theme');
+                localStorage.setItem('site-theme', 'light');
+            }
+        }
 
         function toggleMode() {
             isLogin = !isLogin;
@@ -136,42 +92,29 @@ body { background: var(--bg-color); color: var(--text-color); transition: 0.3s; 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const msg = document.getElementById('msg');
-            
             if(!email || !password) { msg.innerText = "Preencha tudo, capivara!"; return; }
-
             msg.innerText = "Carregando...";
-            
             try {
-                const endpoint = isLogin ? `${API_URL}/login` : `${API_URL}/register`;
-                const res = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ email, password })
+                const res = await fetch(`${API_URL}/${isLogin ? 'login' : 'register'}`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ email, password })
                 });
                 const data = await res.json();
-
                 if (res.ok) {
                     if (isLogin) {
                         document.getElementById('auth-form').style.display = 'none';
                         document.getElementById('success-area').style.display = 'block';
                         document.getElementById('token-display').innerText = data.token;
-                    } else {
-                        alert("Conta criada! Agora faça login.");
-                        toggleMode();
-                        msg.innerText = "";
-                    }
-                } else {
-                    msg.innerText = data.error || "Erro desconhecido";
-                }
-            } catch (e) {
-                msg.innerText = "Erro ao conectar no servidor.";
-            }
+                    } else { alert("Conta criada! Agora faça login."); toggleMode(); msg.innerText = ""; }
+                } else { msg.innerText = data.error || "Erro desconhecido"; }
+            } catch (e) { msg.innerText = "Erro ao conectar no servidor."; }
         }
 
         function copyToken() {
             navigator.clipboard.writeText(document.getElementById('token-display').innerText);
-            alert("Copiado! Agora vá para o WhatsApp.");
+            alert("Copiado!");
         }
+        
+        initializeTheme(); // Chama ao carregar a página
     </script>
 </body>
 </html>
